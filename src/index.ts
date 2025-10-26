@@ -51,12 +51,6 @@ export { IReviewMessageDetails,
     IRatingCategoryItem,
     IRatingCategories } from './interfaces/review.interface'
 
-export { ISearchResult,
-    IHitsTotal,
-    IQueryList,
-    IQueryString,
-    ITerm,
-    IPaginateProps } from './interfaces/search.interface'
 
 export { SellerType,
     ILanguage,
