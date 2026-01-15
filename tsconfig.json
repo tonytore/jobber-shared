@@ -7,8 +7,10 @@
     "importHelpers": true,
     "jsx": "react-jsx",
     "lib": [
-      "dom",
       "esnext"
+    ],
+    "types": [
+      "node"
     ],
     "module": "esnext",
     "moduleResolution": "node",
