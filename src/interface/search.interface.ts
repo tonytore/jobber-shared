@@ -22,6 +22,7 @@ export interface ILokiQuery {
   direction?: 'forward' | 'backward';
 }
 
+
 export interface ILokiQueryBuilder {
   labels: Record<string, string>;
   contains?: string;

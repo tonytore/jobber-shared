@@ -1,4 +1,3 @@
-import { ObjectId } from "mongoose";
 import { IRatingCategories } from "./review.interface";
 
 // By extending ISellerDocument with the Record<string, any> you allow an object to contain other
@@ -22,15 +21,13 @@ export type SellerType =
   | undefined;
 
 export interface ILanguage {
-  [key: string]: string | number | undefined;
-  _id?: string;
+  id?: string;
   language: string;
   level: string;
 }
 
 export interface IExperience {
-  [key: string]: string | number | boolean | undefined;
-  _id?: string;
+  id?: string;
   company: string;
   title: string;
   startDate: string;
@@ -40,8 +37,7 @@ export interface IExperience {
 }
 
 export interface IEducation {
-  [key: string]: string | number | undefined;
-  _id?: string;
+  id?: string;
   country: string;
   university: string;
   title: string;
@@ -50,15 +46,14 @@ export interface IEducation {
 }
 
 export interface ICertificate {
-  [key: string]: string | number | undefined;
-  _id?: string;
+  id?: string;
   name: string;
   from: string;
   year: number | string;
 }
 
 export interface ISellerDocument extends Record<string, SellerType> {
-  _id?: string | ObjectId;
+  id?: string;
   profilePublicId?: string;
   fullName: string;
   username?: string;

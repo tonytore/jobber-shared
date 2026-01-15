@@ -39,7 +39,9 @@
   },
   "types": "./src/index.d.ts",
   "dependencies": {
-    "express": "^5.2.1"
+    "cloudinary": "^2.8.0",
+    "express": "^5.2.1",
+    "http-status-codes": "^2.3.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.28.6",

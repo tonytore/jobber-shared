@@ -21,12 +21,22 @@
     "emitDecoratorMetadata": true,
     "forceConsistentCasingInFileNames": true,
     "pretty": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": [
+        "*"
+      ]
+    }
   },
   "include": [
-    "src"
+    "src/**/*",
+    "prisma/**/*",
+    "Dockerfile"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist",
+    "prisma"
   ]
 }
