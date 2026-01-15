@@ -85,15 +85,15 @@ export type {
 
 export { uploads, videoUploader } from '@/utils/cloudinary-upload'
 export {
-    type IErrorResponse,
-    type IError,
+    IErrorResponse,
+    IError,
     BadRequestError,
     NotFoundError,
     NotAuthorizedError,
     ForbiddenError,
     FileTooLargeError,
     ServerError,
-    type ErrnoException,
+    ErrnoException,
 } from "@/utils/error/error-handler"
 export { verifyGatewayRequest } from '@/utils/gateway-middleware'
 export { firstLetterUppercase, lowerCase, toUpperCase, isEmail, isDataURL } from '@/utils/helper/helper'
