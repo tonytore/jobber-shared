@@ -22,7 +22,7 @@
   "author": "",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tonytore/jobber-shared"
+    "url": "git+https://github.com/tonytore/jobber-shared.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"

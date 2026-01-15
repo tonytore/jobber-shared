@@ -1,7 +1,5 @@
-import { ObjectId } from "mongoose";
-
 export interface IBuyerDocument {
-  _id?: string | ObjectId;
+  id?: string;
   username?: string;
   email?: string;
   profilePicture?: string;

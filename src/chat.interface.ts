@@ -1,17 +1,18 @@
-import mongoose, { ObjectId } from 'mongoose';
 import { IOffer } from './order.interface';
 import { ISellerGig } from './gig.interface';
 import { ISellerDocument } from './seller.interface';
 
-export interface IConversationDocument extends Document {
-  _id: mongoose.Types.ObjectId | string;
+export interface IConversation {
+  id: string;
   conversationId: string;
   senderUsername: string;
   receiverUsername: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
-export interface IMessageDocument {
-  _id?: string | ObjectId;
+export interface IMessage {
+  id?: string;
   conversationId?: string;
   body?: string;
   url?: string;
@@ -53,20 +54,20 @@ export interface IChatBoxProps {
 }
 
 export interface IChatSellerProps {
-  _id: string;
+  id: string;
   username: string;
   profilePicture: string;
   responseTime: number;
 }
 
 export interface IChatBuyerProps {
-  _id: string;
+  id: string;
   username: string;
   profilePicture: string;
 }
 
 export interface IChatMessageProps {
-  message: IMessageDocument;
+  message: IMessage;
   seller?: ISellerDocument;
   gig?: ISellerGig;
 }
