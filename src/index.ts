@@ -1,4 +1,4 @@
-export {
+export type {
     IAuthPayload,
     IAuth,
     IAuthDocument,
@@ -15,12 +15,12 @@ export {
     IAuthUser
 } from '@/interface/auth.interface'
 
-export {
+export type {
     IBuyerDocument,
     IReduxBuyer
 } from '@/interface/buyer.interface'
 
-export {
+export type {
     IConversation,
     IMessage,
     IMessageDetails,
@@ -31,11 +31,11 @@ export {
 
 } from '@/interface/chat.interface'
 
-export {
+export type {
     IEmailLocals
 } from '@/interface/email.interface'
 
-export {
+export type {
     GigType,
     ICreateGig,
     ISellerGig,
@@ -48,7 +48,7 @@ export {
     IGigTopProps
 } from "@/interface/gig.interface"
 
-export {
+export type {
     IOffer,
     IExtendedDelivery,
     IDeliveredWork,
@@ -59,14 +59,14 @@ export {
     IOrderNotifcation
 } from '@/interface/order.interface'
 
-export {
+export type {
     IReviewMessageDetails,
     IRatingTypes,
     IReviewDocument,
     IRatingCategoryItem,
     IRatingCategories
 } from '@/interface/review.interface'
-export {
+export type {
     ILokiSearchResult,
     ILokiData,
     ILokiResult,
@@ -74,7 +74,7 @@ export {
     ILokiQueryBuilder,
     ILokiPaginateProps
 } from '@/interface/search.interface'
-export {
+export type {
     SellerType,
     ILanguage,
     IExperience,
@@ -85,15 +85,15 @@ export {
 
 export { uploads, videoUploader } from '@/utils/cloudinary-upload'
 export {
-    IErrorResponse,
-    IError,
+    type IErrorResponse,
+    type IError,
     BadRequestError,
     NotFoundError,
     NotAuthorizedError,
     ForbiddenError,
     FileTooLargeError,
     ServerError,
-    ErrnoException,
+    type ErrnoException,
 } from "@/utils/error/error-handler"
 export { verifyGatewayRequest } from '@/utils/gateway-middleware'
 export { firstLetterUppercase, lowerCase, toUpperCase, isEmail, isDataURL } from '@/utils/helper/helper'
