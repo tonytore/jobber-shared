@@ -32,13 +32,9 @@
     }
   },
   "include": [
-    "src/**/*",
-    "prisma/**/*",
-    "Dockerfile"
+    "src"
   ],
   "exclude": [
-    "node_modules",
-    "dist",
-    "prisma"
+    "node_modules"
   ]
 }
