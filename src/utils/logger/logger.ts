@@ -1,4 +1,4 @@
-import appConfig from "@/config/appConfig";
+import appConfig from "../../config/appConfig";
 import winston, { Logger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 import LokiTransport from "winston-loki";
