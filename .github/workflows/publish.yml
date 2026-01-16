@@ -26,3 +26,25 @@ jobs:
         working-directory: ./build
         env:
           AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          - name: Debug - Show environment variables (token presence)
+        run: |
+          echo "NODE_AUTH_TOKEN length = ${#NODE_AUTH_TOKEN}"   # Should print a number >0 if set
+          echo "First few chars of token (masked): ${NODE_AUTH_TOKEN:0:4}..." || echo "Token not set!"
+
+      - name: Debug - Show npm config (what registry & auth npm will use)
+        run: npm config list --long
+
+      - name: Debug - Show ALL .npmrc files that might be used
+        run: |
+          echo "Root .npmrc:"
+          cat .npmrc 2>/dev/null || echo "Not found"
+          echo ""
+          echo "User/global .npmrc:"
+          cat ~/.npmrc 2>/dev/null || echo "Not found"
+          echo ""
+          echo "Build dir .npmrc (where we publish from):"
+          cat build/.npmrc 2>/dev/null || echo "Not found"
+
+      # Optional: try whoami-like check (shows if token is seen at all)
+      - name: Debug - Test npm whoami against GitHub registry
+        run: npm whoami --registry=https://npm.pkg.github.com || echo "whoami failed (expected if no auth)"
