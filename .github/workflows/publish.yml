@@ -1,52 +1,26 @@
-name: Publish Package
-
+name: Publish
 on:
   push:
-    tags:
-      - 'v*.*.*'
-
+    branches: [main]
+  pull_request:
+    branches: [main]
 jobs:
   publish:
     runs-on: ubuntu-latest
-
     permissions:
       contents: read
       packages: write
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Setup Node
-        uses: actions/setup-node@v6
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v6
         with:
           node-version: '20.x'
-          registry-url: https://npm.pkg.github.com
-          scope: '@tonytore'
-
-      - name: Install deps
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-      # 🔒 HARD VERSION LOCK
-      - name: Verify tag matches package.json
-        run: |
-          TAG=${GITHUB_REF_NAME#v}
-          PKG=$(node -p "require('./package.json').version")
-
-          if [ "$TAG" != "$PKG" ]; then
-            echo "❌ Tag ($TAG) does not match package.json ($PKG)"
-            exit 1
-          fi
-
-      # ✅ Copy package.json into build
-      - name: Prepare build package.json
-        run: cp package.json build/package.json
-
-      - name: Publish
-        working-directory: build
-        run: npm publish
+      - run: npm install
+      - run: npm run build 
+      - run: |
+          echo @tonytore:https://npm.pkg.github.com/ > build/.npmrc
+          echo '//npm.pkg.github.com/:_authToken=${NPM_TOKEN}' >> build/.npmrc
+      - run: npm publish
+        working-directory: ./build
         env:
-          NODE_AUTH_TOKEN: ${{ github.token }}
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
