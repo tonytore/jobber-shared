@@ -3,7 +3,7 @@ name: Publish Package
 on:
   push:
     tags:
-      - 'v*.*.*'   # Only version tags like v0.0.5
+      - 'v*.*.*'
 
 jobs:
   publish:
@@ -24,40 +24,29 @@ jobs:
           registry-url: https://npm.pkg.github.com
           scope: '@tonytore'
 
-      - name: Install dependencies
+      - name: Install deps
         run: npm ci
 
-      - name: Build package
+      - name: Build
         run: npm run build
 
-      # 🔐 HARD VERSION GUARD
-      - name: Ensure tag matches package version
+      # 🔒 HARD VERSION LOCK
+      - name: Verify tag matches package.json
         run: |
-          TAG_VERSION=${GITHUB_REF_NAME#v}
-          PKG_VERSION=$(node -p "require('./package.json').version")
+          TAG=${GITHUB_REF_NAME#v}
+          PKG=$(node -p "require('./package.json').version")
 
-          echo "Tag version: $TAG_VERSION"
-          echo "Package version: $PKG_VERSION"
-
-          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
-            echo "❌ Version mismatch"
+          if [ "$TAG" != "$PKG" ]; then
+            echo "❌ Tag ($TAG) does not match package.json ($PKG)"
             exit 1
           fi
 
-      # 🔁 Sync version into build/package.json
-      - name: Sync package.json into build
-        run: |
-          node -e "
-            const fs = require('fs');
-            const pkg = require('./package.json');
-            fs.writeFileSync(
-              'build/package.json',
-              JSON.stringify(pkg, null, 2)
-            );
-          "
+      # ✅ Copy package.json into build
+      - name: Prepare build package.json
+        run: cp package.json build/package.json
 
       - name: Publish
+        working-directory: build
         run: npm publish
-        working-directory: ./build
         env:
           NODE_AUTH_TOKEN: ${{ github.token }}
