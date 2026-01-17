@@ -1,27 +1,63 @@
-name: Publish
+name: Publish Package
+
 on:
   push:
     tags:
-      - 'v*.*.*'
-  pull_request:
-    branches: [main]
+      - 'v*.*.*'   # Only version tags like v0.0.5
+
 jobs:
   publish:
     runs-on: ubuntu-latest
+
     permissions:
       contents: read
       packages: write
+
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v6
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
         with:
           node-version: '20.x'
-      - run: npm install
-      - run: npm run build 
-      - run: |
-          echo @tonytore:https://npm.pkg.github.com/ > build/.npmrc
-          echo '//npm.pkg.github.com/:_authToken=${NPM_TOKEN}' >> build/.npmrc
-      - run: npm publish
+          registry-url: https://npm.pkg.github.com
+          scope: '@tonytore'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build package
+        run: npm run build
+
+      # 🔐 HARD VERSION GUARD
+      - name: Ensure tag matches package version
+        run: |
+          TAG_VERSION=${GITHUB_REF_NAME#v}
+          PKG_VERSION=$(node -p "require('./package.json').version")
+
+          echo "Tag version: $TAG_VERSION"
+          echo "Package version: $PKG_VERSION"
+
+          if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
+            echo "❌ Version mismatch"
+            exit 1
+          fi
+
+      # 🔁 Sync version into build/package.json
+      - name: Sync package.json into build
+        run: |
+          node -e "
+            const fs = require('fs');
+            const pkg = require('./package.json');
+            fs.writeFileSync(
+              'build/package.json',
+              JSON.stringify(pkg, null, 2)
+            );
+          "
+
+      - name: Publish
+        run: npm publish
         working-directory: ./build
         env:
-          NPM_TOKEN: ${{ github.token }}
+          NODE_AUTH_TOKEN: ${{ github.token }}
