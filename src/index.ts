@@ -97,5 +97,5 @@ export {
 } from "./utils/error/error-handler"
 export { verifyGatewayRequest } from './utils/gateway-middleware'
 export { firstLetterUppercase, lowerCase, toUpperCase, isEmail, isDataURL } from './utils/helper/helper'
-export { logger } from './utils/logger/logger'
+export { winstonLogger } from './utils/logger/logger'
 

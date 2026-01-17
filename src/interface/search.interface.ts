@@ -4,6 +4,7 @@ export interface ILokiSearchResult {
   data: ILokiData;
 }
 
+
 export interface ILokiData {
   resultType: 'streams' | 'matrix' | 'vector';
   result: ILokiResult[];

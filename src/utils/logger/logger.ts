@@ -1,70 +1,80 @@
-import appConfig from "../../config/appConfig";
-import winston, { Logger } from "winston";
-import DailyRotateFile from "winston-daily-rotate-file";
-import LokiTransport from "winston-loki";
+import winston, { Logger } from 'winston'
+import LokiTransport from 'winston-loki'
 
-const winstonLogger = (
-    lokiUrl: string,
-    name: string,
-    level: string,
-    nodeEnv: "development" | "production",
-): Logger => {
-    const options = {
-        console: {
-            level,
-            handleExceptions: true,
-            format: winston.format.combine(
-                winston.format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
-                winston.format.colorize({ all: true }),
-                winston.format.printf(({ level, message, label, timestamp }) => {
-                    return `${timestamp} [${label || name}] ${level}: ${message}`;
-                }),
-            ),
-        },
-        loki: {
-            labels: { app: name, environment: nodeEnv },
-            level,
-            host: lokiUrl,
-            format: winston.format.json(),
-            replaceTimestamp: true,
-            onConnectionError: (err: unknown) =>
-                console.error("Loki connection error:", err),
-        },
-        file: new DailyRotateFile({
-            filename: "logs/application%DATE%.log",
-            datePattern: "YYYY-MM-DD",
-            zippedArchive: true,
-            maxSize: "10m",
-            maxFiles: "14d",
-            format: winston.format.combine(
-                winston.format.timestamp(),
-                winston.format.json(),
-            ),
-        }),
-    };
+export interface LoggerConfig {
+    serviceName: string
+    level: string
+    lokiUrl?: string
+    enableLoki?: boolean
+}
 
-    const transports: winston.transport[] = [options.file];
+export const winstonLogger = (config: LoggerConfig): Logger => {
+    const { serviceName, level, lokiUrl, enableLoki = true } = config
 
-    if (nodeEnv === "development") {
-        transports.push(new winston.transports.Console(options.console));
-        transports.push(new LokiTransport(options.loki));
-    } else {
-        // In production, we primarily use Loki, but keep the file rotate as a fallback
-        transports.push(new LokiTransport(options.loki));
+    const consoleOptions = {
+        level,
+        handleException: true,
+        json: true,
+        colorize: true,
+        format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.errors({ stack: true }),
+            winston.format.json()
+        )
     }
 
-    return winston.createLogger({
+    const transports: winston.transport[] = [
+        new winston.transports.Console(consoleOptions)
+    ]
+
+    // Add Loki transport if enabled and URL is provided
+    if (enableLoki && lokiUrl) {
+        const lokiOptions = {
+            host: lokiUrl,
+            labels: {
+                service: serviceName,
+                environment: process.env.NODE_ENV || 'development'
+            },
+            json: true,
+            format: winston.format.json(),
+            onConnectionError: (err: Error) => console.warn('Loki connection error:', err)
+        }
+
+        try {
+            const lokiTransport = new LokiTransport(lokiOptions)
+            transports.push(lokiTransport)
+        } catch (error) {
+            console.warn('Failed to initialize Loki transport:', error)
+        }
+    }
+
+    const logger: Logger = winston.createLogger({
         exitOnError: false,
-        defaultMeta: { service: name },
-        transports: transports,
-    });
-};
+        defaultMeta: {
+            service: serviceName,
+            timestamp: new Date().toISOString()
+        },
+        transports
+    })
 
-const logger = winstonLogger(
-    appConfig.LOKI_URL || "http://loki:3100",
-    appConfig.APP_NAME || "auth-service",
-    appConfig.LOG_LEVEL || "info",
-    appConfig.NODE_ENV || "development",
-);
+    return logger
+}
 
-export { logger };
+// Convenience function for quick setup
+export const createLogger = (serviceName: string, lokiUrl?: string): Logger => {
+    return winstonLogger({
+        serviceName,
+        level: process.env.LOG_LEVEL || 'info',
+        lokiUrl: lokiUrl || process.env.LOKI_URL || 'http://loki:3100',
+        enableLoki: !!lokiUrl || !!process.env.LOKI_URL
+    })
+}
+
+// Simple console-only logger for development
+export const createConsoleLogger = (serviceName: string): Logger => {
+    return winstonLogger({
+        serviceName,
+        level: process.env.LOG_LEVEL || 'info',
+        enableLoki: false
+    })
+}
