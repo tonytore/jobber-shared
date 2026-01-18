@@ -4,11 +4,9 @@
     "emitDeclarationOnly": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
     "importHelpers": true,
     "jsx": "react-jsx",
     "lib": [
-      "dom",
       "esnext"
     ],
     "module": "esnext",

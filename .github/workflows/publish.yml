@@ -1,43 +1,26 @@
-name: Publish Package
-
+name: Publish
 on:
   push:
-    tags:
-      - 'v*.*.*'
-
+    branches: [main]
+  pull_request:
+    branches: [main]
 jobs:
   publish:
     runs-on: ubuntu-latest
-
     permissions:
       contents: read
       packages: write
-
     steps:
       - uses: actions/checkout@v5
-
       - uses: actions/setup-node@v6
         with:
-          node-version: 20
-          registry-url: https://npm.pkg.github.com
-          scope: '@tonytore'
-
-      - run: npm ci
-      - run: npm run build
-
-      # safety lock
-      - name: Verify tag matches package.json
-        run: |
-          TAG=${GITHUB_REF_NAME#v}
-          PKG=$(node -p "require('./package.json').version")
-          if [ "$TAG" != "$PKG" ]; then
-            echo "Tag $TAG does not match package.json $PKG"
-            exit 1
-          fi
-
-      - run: cp package.json build/package.json
-
+          node-version: '20.x'
+      - run: npm install
+      - run: npm run build 
+      - run: |
+          echo @tonytore:https://npm.pkg.github.com/ > build/.npmrc
+          echo '//npm.pkg.github.com/:_authToken=${NPM_TOKEN}' >> build/.npmrc
       - run: npm publish
-        working-directory: build
+        working-directory: ./build
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}

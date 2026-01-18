@@ -13,12 +13,12 @@ export type {
     IReduxLogout,
     IAuthResponse,
     IAuthUser
-} from './interface/auth.interface'
+} from './auth.interface'
 
 export type {
     IBuyerDocument,
     IReduxBuyer
-} from './interface/buyer.interface'
+} from './buyer.interface'
 
 export type {
     IConversation,
@@ -29,11 +29,11 @@ export type {
     IChatBuyerProps,
     IChatMessageProps
 
-} from './interface/chat.interface'
+} from './chat.interface'
 
 export type {
     IEmailLocals
-} from './interface/email.interface'
+} from './email.interface'
 
 export type {
     GigType,
@@ -46,7 +46,7 @@ export type {
     IGigViewReviewsProps,
     IGigInfo,
     IGigTopProps
-} from "./interface/gig.interface"
+} from "./gig.interface"
 
 export type {
     IOffer,
@@ -57,7 +57,7 @@ export type {
     IOrderMessage,
     IOrderDocument,
     IOrderNotifcation
-} from './interface/order.interface'
+} from './order.interface'
 
 export type {
     IReviewMessageDetails,
@@ -65,7 +65,7 @@ export type {
     IReviewDocument,
     IRatingCategoryItem,
     IRatingCategories
-} from './interface/review.interface'
+} from './review.interface'
 export type {
     ILokiSearchResult,
     ILokiData,
@@ -73,7 +73,7 @@ export type {
     ILokiQuery,
     ILokiQueryBuilder,
     ILokiPaginateProps
-} from './interface/search.interface'
+} from './search.interface'
 export type {
     SellerType,
     ILanguage,
@@ -81,9 +81,9 @@ export type {
     IEducation,
     ICertificate,
     ISellerDocument
-} from './interface/seller.interface'
+} from './seller.interface'
 
-export { uploads, videoUploader } from './utils/cloudinary-upload'
+export { uploads, videoUploader } from './cloudinary-upload'
 export {
     IErrorResponse,
     IError,
@@ -94,8 +94,8 @@ export {
     FileTooLargeError,
     ServerError,
     ErrnoException,
-} from "./utils/error/error-handler"
-export { verifyGatewayRequest } from './utils/gateway-middleware'
-export { firstLetterUppercase, lowerCase, toUpperCase, isEmail, isDataURL } from './utils/helper/helper'
-export { winstonLogger } from './utils/logger/logger'
+} from "./error-handler"
+export { verifyGatewayRequest } from './gateway-middleware'
+export { firstLetterUppercase, lowerCase, toUpperCase, isEmail, isDataURL } from './helper'
+export { winstonLogger } from './logger'
 
