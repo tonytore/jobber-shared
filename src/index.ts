@@ -94,6 +94,7 @@ export {
     FileTooLargeError,
     ServerError,
     ErrnoException,
+    CustomError
 } from "./error-handler"
 export { verifyGatewayRequest } from './gateway-middleware'
 export { firstLetterUppercase, lowerCase, toUpperCase, isEmail, isDataURL } from './helper'
