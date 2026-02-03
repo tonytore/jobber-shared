@@ -8,11 +8,11 @@ const tokens: string[] = [
 ]
 
 export function verifyGatewayRequest(req: Request, res: Response, next: NextFunction) {
-    if (!req.headers?.gatewayToken) {
+    if (!req.headers?.gatewaytoken) {
         throw new NotAuthorizedError('Invalid request', 'verifyGatewayRequest() method: Request not coming from api gateway')
     }
 
-    const token: string = req.headers.gatewayToken as string;
+    const token: string = req.headers.gatewaytoken as string;
     if (!token) {
         throw new NotAuthorizedError('Invalid request', 'verifyGatewayRequest() method: Request not coming from api gateway')
     }
@@ -22,6 +22,7 @@ export function verifyGatewayRequest(req: Request, res: Response, next: NextFunc
         if (!tokens.includes(payload.id)) {
             throw new NotAuthorizedError('Invalid request', 'verifyGatewayRequest() method: Request not coming from api gateway')
         }
+        next()
     } catch (error) {
         throw new NotAuthorizedError('Invalid request', 'verifyGatewayRequest() method: Request not coming from api gateway')
     }
